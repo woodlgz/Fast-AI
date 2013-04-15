@@ -1,0 +1,42 @@
+/*
+ * GA.h
+ *
+ *  Created on: Apr 15, 2013
+ *      Author: woodlgz
+ */
+
+#ifndef GA_H_
+#define GA_H_
+
+#include "AIException.h"
+
+namespace FASTAI{
+	namespace GA{
+
+		class GeneticPhase;
+		class Possibility;
+		class GA{
+		public:
+			GA(){}
+		private:
+			GeneticPhase* m_phase;
+		};
+
+		class GeneticPhase{
+		public:
+			GeneticPhase(){
+			}
+			virtual ~GenticPhase(){
+			}
+		protected:
+			virtual void crossing(GeneticPhase* phase) = 0;
+			virtual void mutate() = 0;
+		};
+
+		class Possibility(){
+		}
+
+	}
+};
+
+#endif /* GA_H_ */
