@@ -10,11 +10,10 @@
 namespace FASTAI{
 	namespace GA{
 		int Population::bestFit(){
-			return -1;
-		}
 
-		GeneticPhase* Solve(Population* po,Env* env){
-			return NULL;
+		}
+		void solve(Population* po,Env* env){
+
 		}
 	};
 };

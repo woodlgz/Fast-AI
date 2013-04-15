@@ -42,28 +42,26 @@ namespace FASTAI{
 			Population(int size,GeneticPhase* phases){
 				for(int i=0;i<size;i++)
 					m_phases.push_back(&phases[i]);
-				m_maxSize = size<<1;
 			}
 
-			inline GeneticPhase* get(int i){
+			void setEnvironMent(Env* env){
+					m_env = env;
+			}
+
+			GeneticPhase* get(int i){
 				return m_phases[i];
 			}
 
-			inline void set(int i,GeneticPhase* phase){
+			void set(int i,GeneticPhase* phase){
 				m_phases[i]= phase;
 			}
 
-			inline void add(GeneticPhase* phase){
-				if(m_phases.size()<m_maxSize)
-					m_phases.push_back(phase);
+			void add(GeneticPhase* phase){
+				m_phases.push_back(phase);
 			}
-
-			int bestFit();
-
 		private:
-			int m_maxSize;
+			Env* m_env;
 			vector<GeneticPhase*> m_phases;
-
 		};
 
 		class Possibility{
@@ -76,30 +74,25 @@ namespace FASTAI{
 				m_cRate = cRate * BASE;
 				m_mRate = mRate * BASE;
 			}
-			virtual int evaluate(GeneticPhase* phase) = 0;
+			virtual bool isFit(GeneticPhase* phase) = 0;
 
-			inline void setCRate(float cRate){
+			void setCRate(float cRate){
 				m_cRate = int(cRate * BASE);
 			}
-			inline void setMRate(float mRate){
+			void setMRate(float mRate){
 				m_mRate = int(mRate * BASE);
 			}
-			inline int getCRate(){
+			int getCRate(){
 				return m_cRate;
 			}
-			inline int getMRate(){
+			int getMRate(){
 				return m_mRate;
 			}
-			inline void setPopulation(Population* po){
-				m_Po = po;
-			}
-
 		public:
 			const static int BASE = 10000;
 		protected:
 			int m_cRate;
 			int m_mRate;
-			Population* m_Po;
 		};
 
 		void Solve(Population* po,Env* env);

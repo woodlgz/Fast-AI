@@ -1,5 +1,9 @@
 
-**** Rebuild of configuration Debug for project GA ****
+**** Build of configuration Debug for project GA ****
 
 **** Internal Builder is used for build               ****
-Nothing to build for GA
+g++ -O0 -g3 -Wall -c -fmessage-length=0 -oGA.o ../GA.cpp
+g++ -O0 -g3 -Wall -c -fmessage-length=0 -oMain.o ../Main.cpp
+g++ -oGA Main.o GA.o
+Build complete for project GA
+Time consumed: 808  ms.  

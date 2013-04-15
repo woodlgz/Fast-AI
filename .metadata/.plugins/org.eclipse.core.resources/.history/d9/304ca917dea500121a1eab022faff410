@@ -13,8 +13,8 @@ namespace FASTAI{
 			return -1;
 		}
 
-		GeneticPhase* Solve(Population* po,Env* env){
-			return NULL;
+		void solve(Population* po,Env* env){
+
 		}
 	};
 };
