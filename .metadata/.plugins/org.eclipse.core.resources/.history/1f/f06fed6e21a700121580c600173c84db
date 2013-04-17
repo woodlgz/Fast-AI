@@ -1,0 +1,62 @@
+/*
+ * GA.cpp
+ *
+ *  Created on: Apr 15, 2013
+ *      Author: woodlgz
+ */
+
+#include "GA.h"
+#include <stdlib.h>
+#include <math.h>
+#include <time.h>
+
+
+namespace FASTAI{
+	namespace GA{
+
+		void Env::evaluate(){
+			float accumScore = 0.0;
+			m_Max = 0;
+			m_Min = 0;
+			for(int i=0;i<m_PSize;i++){
+				m_Score[i] = judge(i);
+				m_ScoreAux[i] = m_Score[i] + accumScore;
+				accumScore = m_ScoreAux[i];
+				if(m_Score[m_Max]<m_Score[i])
+					m_Max = i;
+				if(m_Score[m_Min]>m_Score[i])
+					m_Min = i;
+			}
+		}
+
+		bool Env::reproduction(){
+			float accumScore = m_ScoreAux[m_PSize-1];
+			int iScore = int(accumScore * Env::BASE);
+			time_t t = time(NULL);
+			srand(t);
+			float score = (rand()%(iScore+1))*1.0 / Env::BASE;
+			int lb = 0, ub = m_PSize;
+			while(lb<=ub){
+				int mid = lb+((ub-lb)>>1);
+				if(m_ScoreAux[mid]<=score)
+					lb = mid+1;
+				else ub = mid-1;
+			}
+			if(ub == -1 || ub == m_Min)
+				return false;
+			m_Population[m_Min] = m_Population[ub];
+		}
+
+		bool Env::exchage(){
+
+		}
+
+		bool Env::mutate(){
+
+		}
+
+		GeneticPhase* Solve(Env* env){
+			return NULL;
+		}
+	};
+};

@@ -65,35 +65,48 @@ namespace FASTAI{
 			virtual ~Env(){
 				if(m_Score!=NULL)
 					delete[] m_Score;
+				if(m_ScoreAux!=NULL)
+					delete[] m_ScoreAux;
 			}
+
+
 
 			/**
 			 * evaluate all element in population.
 			 * generate score that defines the fitness of this element.
 			 * the higher the score is ,the more fitness it takes on.
-			 * score values between [0,100]
+			 * score values between [0.0,1.0]
 			 * */
-			virtual void evaluate() = 0;
-
-			/**
-			 * return the index of the element that fit best in population
-			 */
-			virtual int bestFit();
+			virtual void evaluate();
 
 			/**
 			 * replace the worst one with a better one
 			 */
-			virtual void reproduction();
+			virtual bool reproduction();
 
 			/**
 			 * take two elements in according to CRate for genetic information exchange
 			 */
-			virtual void exchage();
+			virtual bool exchage();
 
 			/**
 			 * take one element in according to MRate for genetic mutation
 			 */
-			virtual void mutate();
+			virtual bool mutate();
+
+			/**
+			 * return the index of the element that fit best in population
+			 */
+			inline int bestFit(){
+				return m_Max;
+			}
+
+			/**
+			 * return the index of the element that has the least fitness
+			 */
+			inline int leastFit(){
+				return m_Min;
+			}
 
 			/**
 			 * set the cross rate for genetic information exchange
@@ -122,9 +135,10 @@ namespace FASTAI{
 			 */
 			inline void setPopulation(GeneticPhase* population,int size){
 				if(size<=0)return;
-				m_Population = pupulation;
+				m_Population = population;
 				m_PSize = size;
-				m_Score = new int[size];
+				m_Score = new float[size];
+				m_ScoreAux = new float[size];
 				memset(m_Score,0,size);
 			}
 
@@ -132,11 +146,17 @@ namespace FASTAI{
 			 * pick one element from the population
 			 */
 			inline GeneticPhase* getElement(int i){
-				if(m_Size>0 && i<m_Size){
+				if(m_PSize>0 && i<m_PSize){
 					return m_Population[i];
 				}
 				return NULL;
 			}
+		protected:
+			/**
+			 * calculate the score for element
+			 * @param: index for the element in population
+			 */
+			virtual float judge(int i) = 0;
 
 		public:
 			const static int BASE = 10000;
@@ -144,7 +164,10 @@ namespace FASTAI{
 			int m_CRate;
 			int m_MRate;
 			int m_PSize;
-			int* m_Score;
+			int m_Max;
+			int m_Min;
+			float* m_Score;
+			float* m_ScoreAux;						//auxilary array
 			GeneticPhase* m_Population;
 		};
 
