@@ -1,0 +1,85 @@
+/*
+ * GA.h
+ *
+ *  Created on: Apr 15, 2013
+ *      Author: woodlgz
+ */
+
+#ifndef GA_H_
+#define GA_H_
+
+#include <vector>
+#include "AIException.h"
+
+using namespace std;
+
+namespace FASTAI{
+	namespace GA{
+
+		class GeneticPhase;
+		class Possibility;
+		class Env;
+
+		class GeneticPhase{
+		public:
+			GeneticPhase(){
+			}
+			virtual ~GeneticPhase(){
+			}
+		protected:
+			virtual void crossing(GeneticPhase* phase) = 0;
+			virtual void mutate() = 0;
+		public:
+			friend class Env;
+		};
+
+
+
+		class Possibility{
+
+		};
+
+		class Env{
+		public:
+			Env(float cRate,float mRate){
+				m_CRate = cRate * BASE;
+				m_MRate = mRate * BASE;
+				m_Population = NULL;
+				m_PSize = 0;
+			}
+			virtual int evaluate() = 0;
+
+			virtual int bestFit() = 0;
+
+			inline void setCRate(float cRate){
+				m_CRate = int(cRate * BASE);
+			}
+			inline void setMRate(float mRate){
+				m_MRate = int(mRate * BASE);
+			}
+			inline int getCRate(){
+				return m_CRate;
+			}
+			inline int getMRate(){
+				return m_MRate;
+			}
+			inline void setPopulation(GeneticPhase* population,int size){
+				m_Population = pupulation;
+				m_PSize = size;
+			}
+
+		public:
+			const static int BASE = 10000;
+		protected:
+			int m_CRate;
+			int m_MRate;
+			int m_PSize;
+			GeneticPhase* m_Population;
+		};
+
+		GeneticPhase* Solve(Population* po,Env* env);
+
+	}
+};
+
+#endif /* GA_H_ */

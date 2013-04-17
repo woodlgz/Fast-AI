@@ -68,10 +68,9 @@ namespace FASTAI{
 			}
 
 			/**
-			 * evaluate all element in population.
-			 * generate score that defines the fitness of this element.
-			 * the higher the score is ,the more fitness it takes on.
-			 * score values between [0,100]
+			 * evaluate all element in population
+			 * generate score that defines the fitness of this element
+			 * the higher the score is ,the more fitness it takes on
 			 * */
 			virtual void evaluate() = 0;
 

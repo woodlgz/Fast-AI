@@ -68,22 +68,20 @@ namespace FASTAI{
 			}
 
 			/**
-			 * evaluate all element in population.
-			 * generate score that defines the fitness of this element.
-			 * the higher the score is ,the more fitness it takes on.
-			 * score values between [0,100]
+			 * evaluate all element in population
+			 * generate score that defines the fitness of this element
 			 * */
 			virtual void evaluate() = 0;
 
 			/**
 			 * return the index of the element that fit best in population
 			 */
-			virtual int bestFit();
+			virtual int bestFit() = 0;
 
 			/**
 			 * replace the worst one with a better one
 			 */
-			virtual void reproduction();
+			virtual int reproduction();
 
 			/**
 			 * take two elements in according to CRate for genetic information exchange
@@ -129,7 +127,7 @@ namespace FASTAI{
 			}
 
 			/**
-			 * pick one element from the population
+			 * pick one element from the pupulation
 			 */
 			inline GeneticPhase* getElement(int i){
 				if(m_Size>0 && i<m_Size){

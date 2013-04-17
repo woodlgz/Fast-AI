@@ -12,24 +12,11 @@ namespace FASTAI{
 	namespace GA{
 
 		int Env::bestFit(){
-			int max = 0;
-			for(int i=0;i<this->m_PSize;i++){
-				if(m_Score[max]<m_Score[i])
-					max = i;
-			}
-			return max;
+			return -1;
 		}
 
 		void Env::reproduction(){
-
-		}
-
-		void Env::exchage(){
-
-		}
-
-		void Env::mutate(){
-
+			return -1;
 		}
 
 		GeneticPhase* Solve(Env* env){
