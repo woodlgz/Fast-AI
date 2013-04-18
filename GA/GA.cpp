@@ -10,6 +10,7 @@
 #include <math.h>
 #include <time.h>
 
+using namespace std;
 
 namespace FASTAI{
 	namespace GA{
@@ -44,22 +45,55 @@ namespace FASTAI{
 			}
 			if(ub == -1 || ub == m_Min)
 				return false;
-			m_Population[m_Min] = m_Population[ub];
+			*(m_Population[m_Min]) = *(m_Population[ub]);	// genetic copy
 			// m_Min and m_ScoreAux has been dirty
-
 			return true;
 		}
 
 		bool Env::exchage(){
+			time_t t = time(NULL);
+			srand(t);
+			int rInt = rand()%(Env::BASE+1);
+			if(rInt<=m_CRate){	//bingo
+				t = time(NULL);
+				srand(t);
+				rInt = rand()%(m_PSize);
+				swap(m_Population[rInt],m_Population[m_PSize-1]);
+				t = time(NULL);
+				srand(t);
+				rInt = rand()%(m_PSize-1);
+				m_Population[rInt]->crossing(m_Population[m_PSize-1]);
+				return true;
+			}
 			return false;
 		}
 
 		bool Env::mutate(){
+			time_t t = time(NULL);
+			srand(t);
+			int rInt = rand()%(Env::BASE+1);
+			if(rInt<=m_MRate){	//bingo
+				t = time(NULL);
+				srand(t);
+				rInt = rand()%(m_PSize);
+				m_Population[rInt]->mutate();
+				return true;
+			}
 			return false;
 		}
 
-		GeneticPhase* Solve(Env* env){
-			return NULL;
+		GeneticPhase* Solve(Env* env, int max_time){
+			if(!env)
+				return NULL;
+			while(max_time>0){
+				env->evaluate();
+				env->reproduction();
+				env->exchage();
+				env->mutate();
+				max_time--;
+			}
+			env->evaluate();	//upate score
+			return env->bestFit();
 		}
 	};
 };

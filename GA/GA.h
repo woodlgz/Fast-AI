@@ -10,6 +10,7 @@
 
 #include <stdlib.h>
 #include <string.h>
+#include <algorithm>
 #include "AIException.h"
 
 using namespace std;
@@ -17,9 +18,11 @@ using namespace std;
 namespace FASTAI{
 	namespace GA{
 
+		const int MAX_AGE = 100 ;
+
 		class GeneticPhase;
-		class Possibility;
 		class Env;
+
 
 		/**
 		 * genetic information
@@ -39,15 +42,62 @@ namespace FASTAI{
 				m_Coding = coding;
 				m_Len = len;
 			}
+			virtual void init() = 0;
 		protected:
 			virtual void crossing(GeneticPhase* phase) = 0;
 			virtual void mutate() = 0;
+			virtual GeneticPhase& operator = (GeneticPhase& phase){
+				strncpy(m_Coding,phase.m_Coding,m_Len);
+				return *this;
+			}
+			virtual GeneticPhase& copy(GeneticPhase& phase){
+				return this->operator=(phase);
+			}
 		public:
 			friend class Env;
-		private:
+		protected:
 			char* m_Coding;
 			int m_Len;
 		};
+
+		/**
+		 * GeneticFactory that generate new element of population
+		 * subClass should implement newInstance method,and call GeneticPhase::init
+		 * subClass should be Singleton
+		 */
+		class _GeneticFactory{
+		protected:
+			_GeneticFactory(){
+			}
+		public:
+			virtual GeneticPhase* newInstance() = 0;
+		};
+
+		typedef _GeneticFactory GFactory;
+
+		template<class F>
+		class GeneticFactory : public GFactory{
+		private:
+			GeneticFactory(){
+				Factory = this;
+			}
+		public:
+			static GFactory* getFactory(){
+				if(Factory != NULL)
+					Factory = new GeneticFactory<F>();
+				return Factory;
+			}
+			GeneticPhase* newInstance(){
+				GeneticPhase* instance = new F();
+				instance->init();
+				return instance;
+			}
+		public:
+			static GFactory* Factory;
+		};
+
+		template<class F>
+		GFactory* GeneticFactory<F>::Factory = NULL;
 
 		/**
 		 * environment in which the population grows
@@ -57,12 +107,18 @@ namespace FASTAI{
 			Env(float cRate,float mRate){
 				m_CRate = cRate * BASE;
 				m_MRate = mRate * BASE;
+				m_Factory = NULL;
 				m_Population = NULL;
 				m_Score = NULL;
 				m_PSize = 0;
 			}
 
 			virtual ~Env(){
+				for(int i=0;i<m_PSize;i++){
+					if(m_Population[i]!=NULL)
+						delete m_Population[i];
+				}
+				delete[] m_Population;
 				if(m_Score!=NULL)
 					delete[] m_Score;
 				if(m_ScoreAux!=NULL)
@@ -95,17 +151,29 @@ namespace FASTAI{
 			virtual bool mutate();
 
 			/**
-			 * return the index of the element that fit best in population
+			 * return the the element that fit best in population
 			 */
-			inline int bestFit(){
-				return m_Max;
+			inline GeneticPhase* bestFit(){
+				return m_Population[m_Max];
 			}
 
 			/**
-			 * return the index of the element that has the least fitness
+			 * return the element that has the least fitness
 			 */
-			inline int leastFit(){
-				return m_Min;
+			inline GeneticPhase* leastFit(){
+				//recalculate the minimun,fot it may be dirty
+				for(int i=0;i<m_PSize;i++){
+					if(m_Score[m_Min]>m_Score[i])
+						m_Min = i;
+				}
+				return m_Population[m_Min];
+			}
+
+			/**
+			 * set factory that generate new element in the population
+			 */
+			inline void setGeneticFactory(GFactory* factory){
+				m_Factory = factory;
 			}
 
 			/**
@@ -130,12 +198,19 @@ namespace FASTAI{
 				return m_MRate;
 			}
 
+			inline void setPopulationSize(int size){
+				m_PSize = size;
+			}
+
 			/**
-			 * set the initial population
+			 * initialize the population
 			 */
-			inline void setPopulation(GeneticPhase* population,int size){
-				if(size<=0)return;
-				m_Population = population;
+			inline void initPopulation(int size){
+				if(size<=0 || m_Factory == NULL)return;
+				m_Population = new GeneticPhase*[size];
+				for(int i =0;i<size;i++){
+					m_Population[i] = m_Factory->newInstance();
+				}
 				m_PSize = size;
 				m_Score = new float[size];
 				m_ScoreAux = new float[size];
@@ -168,13 +243,17 @@ namespace FASTAI{
 			int m_Min;
 			float* m_Score;
 			float* m_ScoreAux;						//auxilary array
-			GeneticPhase* m_Population;
+			GeneticPhase** m_Population;
+			GFactory* m_Factory;
 		};
 
 		/**
 		 * using GA to solve the problem defined by environment
+		 * @param env : the specified environment
+		 * @param max_time : the max evolution time.
 		 */
-		GeneticPhase* Solve(Env* env);
+		GeneticPhase* Solve(Env* env,int max_time = GA::MAX_AGE);
+
 
 	}
 };
