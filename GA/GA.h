@@ -19,6 +19,7 @@ namespace FASTAI{
 	namespace GA{
 
 		const int MAX_AGE = 100 ;
+		const int POPULATION_DEFAULT_SIZE = 100;
 
 		class GeneticPhase;
 		class Env;
@@ -30,34 +31,75 @@ namespace FASTAI{
 		 */
 		class GeneticPhase{
 		public:
-			GeneticPhase(){
-				m_Coding = NULL;
-				m_Len = 0;
+			GeneticPhase(int len):m_Len(len),m_Coding(NULL){
 			}
 			virtual ~GeneticPhase(){
-				if(m_Coding!=NULL)
-					delete[] m_Coding;
 			}
-			inline void setCoding(char* coding,int len){
+
+			/**
+			 * set the coding
+			 */
+			inline void setCoding(unsigned char* coding,int len){
 				m_Coding = coding;
 				m_Len = len;
 			}
-			virtual void init() = 0;
-		protected:
-			virtual void crossing(GeneticPhase* phase) = 0;
-			virtual void mutate() = 0;
+			/**
+			 * get len of coding
+			 */
+			inline int getLen(){
+				return m_Len;
+			}
+			/*
+			 * get code at position i in coding
+			 */
+			inline unsigned char getCodeAt(int i){
+				return m_Coding[i];
+			}
+
+			/**
+			 * genetic phase copy
+			 */
 			virtual GeneticPhase& operator = (GeneticPhase& phase){
-				strncpy(m_Coding,phase.m_Coding,m_Len);
-				return *this;
+					memcpy((void*)m_Coding,(void*)(phase.m_Coding),m_Len);
+					return *this;
 			}
+
+			/**
+			 *	genetic phase copy
+			 */
 			virtual GeneticPhase& copy(GeneticPhase& phase){
-				return this->operator=(phase);
+					return this->operator=(phase);
 			}
+			/**
+			 * decode the coding,returns a more readable object
+			 */
+			virtual void* read() = 0;
+
+		protected:
+			/**
+			 * initialize the genetic code
+			 */
+			virtual void init() = 0;
+
+			/**
+			 * clean up
+			 */
+			virtual void cleanup() = 0;
+
+			/**
+			 * handle cross exchange between genetic phases
+			 */
+			virtual void crossing(GeneticPhase* phase) = 0;
+
+			/**
+			 * handle the genetic mutation
+			 */
+			virtual void mutate() = 0;
 		public:
 			friend class Env;
 		protected:
-			char* m_Coding;
 			int m_Len;
+			unsigned char* m_Coding;
 		};
 
 		/**
@@ -87,10 +129,8 @@ namespace FASTAI{
 					Factory = new GeneticFactory<F>();
 				return Factory;
 			}
-			GeneticPhase* newInstance(){
-				GeneticPhase* instance = new F();
-				instance->init();
-				return instance;
+			inline GeneticPhase* newInstance(){
+				return new F();
 			}
 		public:
 			static GFactory* Factory;
@@ -108,6 +148,14 @@ namespace FASTAI{
 				m_CRate = cRate * BASE;
 				m_MRate = mRate * BASE;
 				m_Factory = NULL;
+				m_Population = NULL;
+				m_Score = NULL;
+				m_PSize = 0;
+			}
+			Env(float cRate,float mRate,GFactory* factory){
+				m_CRate = cRate * BASE;
+				m_MRate = mRate * BASE;
+				m_Factory = factory;
 				m_Population = NULL;
 				m_Score = NULL;
 				m_PSize = 0;
@@ -227,8 +275,18 @@ namespace FASTAI{
 				return NULL;
 			}
 		protected:
+			/*
+			 * evaluate the whole population.
+			 * it can provide some information for judge(i).
+			 * called before judge(i) in evaluate().
+			 * overwrite this if needed.
+			 */
+			virtual void judge() {
+
+			}
+
 			/**
-			 * calculate the score for element
+			 * calculate the score for element,called in evaluate()
 			 * @param: index for the element in population
 			 */
 			virtual float judge(int i) = 0;
@@ -250,9 +308,10 @@ namespace FASTAI{
 		/**
 		 * using GA to solve the problem defined by environment
 		 * @param env : the specified environment
+		 * @param pSize : the population size
 		 * @param max_time : the max evolution time.
 		 */
-		GeneticPhase* Solve(Env* env,int max_time = GA::MAX_AGE);
+		GeneticPhase* Solve(Env* env, int pSize = POPULATION_DEFAULT_SIZE, int max_time = MAX_AGE);
 
 
 	}

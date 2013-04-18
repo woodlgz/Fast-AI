@@ -19,6 +19,7 @@ namespace FASTAI{
 			float accumScore = 0.0;
 			m_Max = 0;
 			m_Min = 0;
+			judge();
 			for(int i=0;i<m_PSize;i++){
 				m_Score[i] = judge(i);
 				m_ScoreAux[i] = m_Score[i] + accumScore;
@@ -82,9 +83,10 @@ namespace FASTAI{
 			return false;
 		}
 
-		GeneticPhase* Solve(Env* env, int max_time){
+		GeneticPhase* Solve(Env* env, int pSize, int max_time){
 			if(!env)
 				return NULL;
+			env->initPopulation(pSize);
 			while(max_time>0){
 				env->evaluate();
 				env->reproduction();
