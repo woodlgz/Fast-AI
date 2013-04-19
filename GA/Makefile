@@ -1,0 +1,41 @@
+CC = gcc
+GXX = g++
+
+GA_SOURCE = ./GA.cpp
+MAIN_SOURCE = ./Main.cpp
+
+INCLUDE_PATH = -I/usr/include/ 
+LIRARY_PATH = -L/usr/lib64 
+LIBS = 
+
+GA_TARGET = GA.o
+MAIN_TARGET = GA_DEMO
+DEBUG_PATH = ./Debug
+RELEASE_PATH = ./Release
+
+GA_DEBUG:
+	$(GXX) -c $(GA_SOURCE) -o $(DEBUG_PATH)/$(GA_TARGET) 
+
+GA_RELEASE:
+	$(GXX) -c $(GA_SOURCE) -o $(RELEASE_PATH)/$(GA_TARGET)
+
+debug:
+	mkdir $(DEBUG_PATH)
+	make GA_DEBUG
+	$(GXX) -c $(MAIN_SOURCE) -o $(DEBUG_PATH)/$(MAIN_TARGET).o $(INCLUDE_PATH)
+	$(GXX) $(DEBUG_PATH)/$(MAIN_TARGET).o $(DEBUG_PATH)/$(GA_TARGET) -o $(DEBUG_PATH)/$(MAIN_TARGET) $(LIBBRARY_PATH) $(LIBS)
+
+release:
+	mkdir $(RELEASE_PATH)
+	make GA_RELEASE
+	$(GXX) -c $(MAIN_SOURCE) -o $(RELEASE_PATH)/$(MAIN_TARGET).o $(INCLUDE_PATH)
+	$(GXX) $(RELEASE_PATH)/$(MAIN_TARGET).o $(RELEASE_PATH)/$(GA_TARGET) -o $(RELEASE_PATH)/$(MAIN_TARGET) $(LIBBRARY_PATH) $(LIBS)
+
+all:
+	make debug
+	make release
+
+clean:
+	rm -rf $(DEBUG_PATH)
+	rm -rf $(RELEASE_PATH)
+
