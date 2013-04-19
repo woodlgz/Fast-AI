@@ -12,7 +12,6 @@
 #include <string.h>
 #include <algorithm>
 #include "AIException.h"
-
 using namespace std;
 
 namespace FASTAI{
@@ -125,7 +124,7 @@ namespace FASTAI{
 			}
 		public:
 			static GFactory* getFactory(){
-				if(Factory != NULL)
+				if(Factory == NULL)
 					Factory = new GeneticFactory<F>();
 				return Factory;
 			}
@@ -263,6 +262,7 @@ namespace FASTAI{
 				m_Score = new float[size];
 				m_ScoreAux = new float[size];
 				memset(m_Score,0,size);
+				memset(m_ScoreAux,0,size);
 			}
 
 			/**

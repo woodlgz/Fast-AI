@@ -9,6 +9,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include <time.h>
+#include <iostream>
 
 using namespace std;
 
@@ -33,9 +34,9 @@ namespace FASTAI{
 
 		bool Env::reproduction(){
 			float accumScore = m_ScoreAux[m_PSize-1];
-			int iScore = int(accumScore * Env::BASE);
+			unsigned int iScore = (unsigned int)(accumScore * Env::BASE);
 			time_t t = time(NULL);
-			srand(t);
+			srand(rand()%t);
 			float score = (rand()%(iScore+1))*1.0 / Env::BASE;
 			int lb = 0, ub = m_PSize;
 			while(lb<=ub){
@@ -53,15 +54,15 @@ namespace FASTAI{
 
 		bool Env::exchage(){
 			time_t t = time(NULL);
-			srand(t);
+			srand(rand()%t);
 			int rInt = rand()%(Env::BASE+1);
 			if(rInt<=m_CRate){	//bingo
 				t = time(NULL);
-				srand(t);
+				srand(rand()%t);
 				rInt = rand()%(m_PSize);
 				swap(m_Population[rInt],m_Population[m_PSize-1]);
 				t = time(NULL);
-				srand(t);
+				srand(rand()%t);
 				rInt = rand()%(m_PSize-1);
 				m_Population[rInt]->crossing(m_Population[m_PSize-1]);
 				return true;
@@ -71,11 +72,11 @@ namespace FASTAI{
 
 		bool Env::mutate(){
 			time_t t = time(NULL);
-			srand(t);
+			srand(rand()%t);
 			int rInt = rand()%(Env::BASE+1);
 			if(rInt<=m_MRate){	//bingo
 				t = time(NULL);
-				srand(t);
+				srand(rand()%t);
 				rInt = rand()%(m_PSize);
 				m_Population[rInt]->mutate();
 				return true;
@@ -87,11 +88,16 @@ namespace FASTAI{
 			if(!env)
 				return NULL;
 			env->initPopulation(pSize);
+			//cout<<"initPopulation"<<endl;
 			while(max_time>0){
 				env->evaluate();
+				//cout<<"evaluate"<<endl;
 				env->reproduction();
+				//cout<<"reproduction"<<endl;
 				env->exchage();
+				//cout<<"exchange"<<endl;
 				env->mutate();
+				//cout<<"mutate"<<endl;
 				max_time--;
 			}
 			env->evaluate();	//upate score
