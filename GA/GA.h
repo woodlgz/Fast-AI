@@ -11,13 +11,13 @@
 #include <stdlib.h>
 #include <string.h>
 #include <algorithm>
+#include <time.h>
 #include "AIException.h"
 using namespace std;
 
 namespace FASTAI{
 	namespace GA{
 
-		const int MAX_AGE = 100 ;
 		const int POPULATION_DEFAULT_SIZE = 100;
 
 		class GeneticPhase;
@@ -30,7 +30,7 @@ namespace FASTAI{
 		 */
 		class GeneticPhase{
 		public:
-			GeneticPhase(int len):m_Len(len),m_Coding(NULL){
+			GeneticPhase(int len):m_Len(len),m_Coding(NULL),m_Answer(-1){
 			}
 			virtual ~GeneticPhase(){
 			}
@@ -38,8 +38,8 @@ namespace FASTAI{
 			/**
 			 * set the coding
 			 */
-			inline void setCoding(unsigned char* coding,int len){
-				m_Coding = coding;
+			inline virtual void setCoding(void* coding,int len){
+				m_Coding = (int*)coding;
 				m_Len = len;
 			}
 			/**
@@ -49,17 +49,19 @@ namespace FASTAI{
 				return m_Len;
 			}
 			/*
-			 * get code at position i in coding
+			 * get code at position i in coding.
+			 * in concern with different type of coding when overwrite m_Coding,return a pointer
 			 */
-			inline unsigned char getCodeAt(int i){
-				return m_Coding[i];
+			inline virtual void* getCodeAt(int i){
+				return &m_Coding[i];
 			}
 
 			/**
 			 * genetic phase copy
 			 */
 			virtual GeneticPhase& operator = (GeneticPhase& phase){
-					memcpy((void*)m_Coding,(void*)(phase.m_Coding),m_Len);
+					memcpy((void*)m_Coding,(void*)(phase.m_Coding),m_Len*sizeof(int));
+					m_Answer = phase.getAnswer();
 					return *this;
 			}
 
@@ -70,13 +72,33 @@ namespace FASTAI{
 					return this->operator=(phase);
 			}
 			/**
-			 * decode the coding,returns a more readable object
+			 * translate the code into human-readable message
+			 * returns a object if detailed information is needed.
+			 * the returned object should be a member variable
 			 */
 			virtual void* read() = 0;
 
+			/**
+			 * calculate the code and normalize it as a number no less than zero
+			 */
+			virtual int calcValueOfCode() = 0;
+
+			/**
+			 * get answer denoted by a number,usually this will be the max value or the min value
+			 */
+			int getAnswer(){
+				if(m_Answer < 0)
+					m_Answer = calcValueOfCode();
+				return m_Answer;
+			}
+
+			void resetAnswer(){
+				m_Answer = -1;
+			}
 		protected:
 			/**
-			 * initialize the genetic code
+			 * initialize the genetic code.
+			 * it is advised that the initial seq should be a possible surrivor (scores higher than 0.0)
 			 */
 			virtual void init() = 0;
 
@@ -94,11 +116,17 @@ namespace FASTAI{
 			 * handle the genetic mutation
 			 */
 			virtual void mutate() = 0;
+
+			/**
+			 * reconstruct the phase so that it is a possible surrivor,which means it should scores higher than 0.0
+			 */
+			virtual void reConstruct() = 0;
 		public:
 			friend class Env;
 		protected:
 			int m_Len;
-			unsigned char* m_Coding;
+			int* m_Coding;
+			int m_Answer;
 		};
 
 		/**
@@ -143,21 +171,32 @@ namespace FASTAI{
 		 */
 		class Env{
 		public:
-			Env(float cRate,float mRate){
+			Env(float cRate = DEFAULT_CROSSRATE,float mRate = DEFAULT_MUTATERATE, int age = MAX_AGE){
 				m_CRate = cRate * BASE;
 				m_MRate = mRate * BASE;
 				m_Factory = NULL;
 				m_Population = NULL;
 				m_Score = NULL;
+				m_ScoreAux = NULL;
 				m_PSize = 0;
+				m_ScoreAvg = 0.0;
+				m_ScoreMax = 0.0;
+				m_Age = m_AgeMax = age;
+				m_HistoryBest = NULL;
 			}
-			Env(float cRate,float mRate,GFactory* factory){
+			Env(GFactory* factory,float cRate = DEFAULT_CROSSRATE, float mRate = DEFAULT_MUTATERATE,
+					int age = MAX_AGE){
 				m_CRate = cRate * BASE;
 				m_MRate = mRate * BASE;
 				m_Factory = factory;
 				m_Population = NULL;
 				m_Score = NULL;
+				m_ScoreAux = NULL;
 				m_PSize = 0;
+				m_ScoreAvg = 0.0;
+				m_ScoreMax = 0.0;
+				m_Age = m_AgeMax = age;
+				m_HistoryBest = NULL;
 			}
 
 			virtual ~Env(){
@@ -165,14 +204,15 @@ namespace FASTAI{
 					if(m_Population[i]!=NULL)
 						delete m_Population[i];
 				}
-				delete[] m_Population;
+				if(m_Population!=NULL)
+					delete[] m_Population;
 				if(m_Score!=NULL)
 					delete[] m_Score;
 				if(m_ScoreAux!=NULL)
 					delete[] m_ScoreAux;
+				if(m_HistoryBest!=NULL)
+					delete m_HistoryBest;
 			}
-
-
 
 			/**
 			 * evaluate all element in population.
@@ -198,14 +238,14 @@ namespace FASTAI{
 			virtual bool mutate();
 
 			/**
-			 * return the the element that fit best in population
+			 * return the the element that fit best in population in current age
 			 */
 			inline GeneticPhase* bestFit(){
 				return m_Population[m_Max];
 			}
 
 			/**
-			 * return the element that has the least fitness
+			 * return the element that has the least fitness in current age
 			 */
 			inline GeneticPhase* leastFit(){
 				//recalculate the minimun,fot it may be dirty
@@ -214,6 +254,13 @@ namespace FASTAI{
 						m_Min = i;
 				}
 				return m_Population[m_Min];
+			}
+
+			/**
+			 * return the age of now
+			 */
+			inline int getAge(){
+				return m_AgeMax - m_Age;
 			}
 
 			/**
@@ -249,21 +296,13 @@ namespace FASTAI{
 				m_PSize = size;
 			}
 
+			inline bool isEndOfWorld(){
+				return m_Age-- == 0;
+			}
 			/**
 			 * initialize the population
 			 */
-			inline void initPopulation(int size){
-				if(size<=0 || m_Factory == NULL)return;
-				m_Population = new GeneticPhase*[size];
-				for(int i =0;i<size;i++){
-					m_Population[i] = m_Factory->newInstance();
-				}
-				m_PSize = size;
-				m_Score = new float[size];
-				m_ScoreAux = new float[size];
-				memset(m_Score,0,size);
-				memset(m_ScoreAux,0,size);
-			}
+			void initPopulation(int size);
 
 			/**
 			 * pick one element from the population
@@ -273,6 +312,10 @@ namespace FASTAI{
 					return m_Population[i];
 				}
 				return NULL;
+			}
+
+			inline GeneticPhase* getHistoryBest(){
+				return m_HistoryBest;
 			}
 		protected:
 			/*
@@ -290,18 +333,35 @@ namespace FASTAI{
 			 * @param: index for the element in population
 			 */
 			virtual float judge(int i) = 0;
+		private:
+
+			/**
+			 *	conduct reproduction in subset of population
+			 *  @param begin : begin of index of subset
+			 *  @param end	 : end of index of subset
+			 *  @return value: the index of selected element in reproduction
+			 */
+			int reproduction(int begin, int end);
 
 		public:
 			const static int BASE = 10000;
+			const static int MAX_AGE = 10000;
+			const static float DEFAULT_CROSSRATE = 0.02;
+			const static float DEFAULT_MUTATERATE = 0.01;
 		protected:
 			int m_CRate;
 			int m_MRate;
 			int m_PSize;
 			int m_Max;
 			int m_Min;
+			int m_AgeMax;
+			int m_Age;
 			float* m_Score;
 			float* m_ScoreAux;						//auxilary array
+			float  m_ScoreAvg;						//average score , may be needed when judging an element
+			float  m_ScoreMax;						//max score , may be needed when judging an element
 			GeneticPhase** m_Population;
+			GeneticPhase* m_HistoryBest;
 			GFactory* m_Factory;
 		};
 
@@ -311,7 +371,7 @@ namespace FASTAI{
 		 * @param pSize : the population size
 		 * @param max_time : the max evolution time.
 		 */
-		GeneticPhase* Solve(Env* env, int pSize = POPULATION_DEFAULT_SIZE, int max_time = MAX_AGE);
+		GeneticPhase* Solve(Env* env, int pSize = POPULATION_DEFAULT_SIZE);
 
 
 	}

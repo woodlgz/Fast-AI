@@ -25,22 +25,28 @@ public:
 	Demo1GeneticPhase():GeneticPhase(LEN){
 		init();
 	}
-	virtual ~Demo1GeneticPhase(){
+	~Demo1GeneticPhase(){
 		cleanup();
 	}
 
 	void* read(){
-		int* result = new int[1];
-		*result = 0;
-		for(int i=0;i<m_Len;i++){
-			*result += m_Coding[i]<<i;
-		}
-		return result;
+		m_Answer = calcValueOfCode();
+		cout<<"max value:"<<m_Answer<<endl;
+		return &m_Answer;
 	}
+
+	int calcValueOfCode(){
+		m_Answer = 0;
+		for(int i=0;i<m_Len;i++){
+			m_Answer+= m_Coding[i]<<i;
+		}
+		return m_Answer;
+	}
+
 private:
 	void init(){
 		time_t t;
-		m_Coding = new unsigned char[m_Len];
+		m_Coding = new int[m_Len];
 		for(int i=0;i<m_Len;i++){
 			t = time(NULL);
 			srand(rand()%t);
@@ -48,8 +54,10 @@ private:
 		}
 	}
 	void cleanup(){
-		if(m_Coding)
+		if(m_Coding){
 			delete[] m_Coding;
+			m_Coding = NULL;
+		}
 	}
 	void crossing(GeneticPhase* phase){
 		Demo1GeneticPhase* _phase = static_cast<Demo1GeneticPhase*>(phase);
@@ -66,7 +74,19 @@ private:
 		srand(rand()%t);
 		m_Coding[i] = rand()%2==0?(~(0x01&m_Coding[i]))&0x01:m_Coding[i];
 	}
-
+	void reConstruct(){
+		bool valid = false;
+		for(int i=0;i<m_Len;i++){
+			srand(rand()%time(NULL));
+			m_Coding[i] = rand()%2;
+			if(!valid && m_Coding[i] == 1)
+				valid = true;
+		}
+		if(!valid){
+			srand(rand()%time(NULL));
+			m_Coding[rand()%m_Len] = 1;
+		}
+	}
 public :
 	static const int LEN  = 6;
 };
@@ -75,8 +95,8 @@ public :
 
 class Demo1Env : public Env{
 public:
-	Demo1Env(float cRate, float mRate, GFactory* factory):
-		Env(cRate,mRate,factory){
+	Demo1Env(GFactory* factory,float cRate, float mRate, int age):
+		Env(factory,cRate,mRate,age){
 	}
 private:
 	void judge(){
@@ -85,7 +105,7 @@ private:
 			int len = m_Population[i]->getLen();
 			int sum = 0;
 			for(int j=0;j<len;j++){
-				sum += m_Population[i]->getCodeAt(j)<<j;
+				sum += *((int*)(m_Population[i]->getCodeAt(j)))<<j;
 			}
 			m_Score[i] = sum;
 			if(m_ScoreMax<m_Score[i])
@@ -94,10 +114,10 @@ private:
 	}
 
 	float judge(int i){
+		if(m_ScoreMax<1e-38&&m_ScoreMax>-1e-38)
+				return 0.0;
 		return m_Score[i] / m_ScoreMax;
 	}
-private:
-	float m_ScoreMax;
 };
 
 #endif /* DEMOPROBLEM1_H_ */
