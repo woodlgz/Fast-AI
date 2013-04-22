@@ -31,16 +31,16 @@ void Demo1(){
 
 /**
  * Demo2 Test Data:
- * unsigned int len = 16;
-   unsigned int itemCnt[17]		=	{0,2,3,4,3,2,1,10,2,3,12,9,5,6,16,17,18};	//first element is just place holder
-   unsigned int value[17]		=	{0,2,5,4,3,6,7, 3,5,2,2 ,2,8,3, 1,2 , 1};
-   unsigned int weight[17]		=	{0,2,3,3,4,5,6, 4,5,4,2 ,1,6,3, 2,1 , 3};
-   unsigned int packSize = 20;
-   unsigned int packItemCnt = 7;
-   unsigned int solution[17];
- */
-
-void Demo2(){
+ *
+  (1)
+   	unsigned int len = 16;
+   	unsigned int itemCnt[17]		=	{0,2,3,4,3,2,1,10,2,3,12,9,5,6,16,17,18};	//first element is just place holder
+   	unsigned int value[17]		=	{0,2,5,4,3,6,7, 3,5,2,2 ,2,8,3, 1,2 , 1};
+   	unsigned int weight[17]		=	{0,2,3,3,4,5,6, 4,5,4,2 ,1,6,3, 2,1 , 3};
+   	unsigned int packSize = 20;
+   	unsigned int packItemCnt = 7;
+   	unsigned int solution[17];
+  (2)
 	unsigned int len = 20;
 	unsigned int itemCnt[21]	=	{0,5,3,2,9,3,1,9,3,4,12,6,4,3,8,17,18, 4,1,9,3};	//first element is just place holder
 	unsigned int value[21]		=	{0,2,5,4,3,6,7, 3,5,2,2 ,3,2,3, 1,3 ,1,9,6,2,7};
@@ -48,6 +48,16 @@ void Demo2(){
 	unsigned int packSize = 30;
 	unsigned int packItemCnt = 10;
 	unsigned int solution[21];
+ */
+
+void Demo2(){
+	unsigned int len = 15;
+	unsigned int itemCnt[16]	=	{0,5,3,2,3,1,9,3,12,6,4,3,17,18, 4,9};	//first element is just place holder
+	unsigned int value[16]		=	{0,2,5,4,6,7, 3,5,2,3,2,3,3 ,1,9,2};
+	unsigned int weight[16]		=	{0,2,3,3,5,4, 4,5,2,3,5,3,3 ,3,8,3};
+	unsigned int packSize = 20;
+	unsigned int packItemCnt = 10;
+	unsigned int solution[16];
 	Demo2GeneticPhase::Problem_Init(packSize,packItemCnt,len,itemCnt,value,weight);
 	cout<<"normal solution"<<endl;
 	cout<<"max value:"<<Demo2GeneticPhase::DPSolution()<<endl;
@@ -73,3 +83,4 @@ int main(int argc,char** argv){
 #endif
 	return 0;
 }
+
