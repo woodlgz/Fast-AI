@@ -13,13 +13,21 @@
 #include <algorithm>
 #include <time.h>
 #include "AIException.h"
+#include "Util.h"
 using namespace std;
+using namespace FASTAI::Util::Common;
+
+
+
+#define GENERATE_RANDOM()	(m_Random->getRandom())
+
 
 namespace FASTAI{
 	namespace GA{
 
 		const int POPULATION_DEFAULT_SIZE = 100;
-
+		const static float DEFAULT_CROSSRATE = 0.02;
+		const static float DEFAULT_MUTATERATE = 0.01;
 		class GeneticPhase;
 		class Env;
 
@@ -31,6 +39,7 @@ namespace FASTAI{
 		class GeneticPhase{
 		public:
 			GeneticPhase(int len):m_Len(len),m_Coding(NULL),m_Answer(-1){
+				m_Random = RandomFactory::getFactory();
 			}
 			virtual ~GeneticPhase(){
 			}
@@ -127,6 +136,7 @@ namespace FASTAI{
 			int m_Len;
 			int* m_Coding;
 			int m_Answer;
+			RandomFactory* m_Random;
 		};
 
 		/**
@@ -183,6 +193,7 @@ namespace FASTAI{
 				m_ScoreMax = 0.0;
 				m_Age = m_AgeMax = age;
 				m_HistoryBest = NULL;
+				m_Random = RandomFactory::getFactory();
 			}
 			Env(GFactory* factory,float cRate = DEFAULT_CROSSRATE, float mRate = DEFAULT_MUTATERATE,
 					int age = MAX_AGE){
@@ -197,6 +208,7 @@ namespace FASTAI{
 				m_ScoreMax = 0.0;
 				m_Age = m_AgeMax = age;
 				m_HistoryBest = NULL;
+				m_Random = RandomFactory::getFactory();
 			}
 
 			virtual ~Env(){
@@ -346,8 +358,7 @@ namespace FASTAI{
 		public:
 			const static int BASE = 10000;
 			const static int MAX_AGE = 10000;
-			const static float DEFAULT_CROSSRATE = 0.02;
-			const static float DEFAULT_MUTATERATE = 0.01;
+
 		protected:
 			int m_CRate;
 			int m_MRate;
@@ -363,6 +374,7 @@ namespace FASTAI{
 			GeneticPhase** m_Population;
 			GeneticPhase* m_HistoryBest;
 			GFactory* m_Factory;
+			RandomFactory* m_Random;
 		};
 
 		/**

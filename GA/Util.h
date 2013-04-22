@@ -10,20 +10,44 @@
 
 using namespace std;
 
+#include <time.h>
+#include <stdlib.h>
+#if defined _WIN32
+#pragma comment(lib,"crypt32.lib")
+#include <windows.h>
+#include <wincrypt.h>
+#endif
+
 namespace FASTAI{
 	namespace Util{
 		namespace Common{
 
-			/**
-			 * select the kth element in array
-			 */
-			template<typename T>
-			int selectKth(T array[],int size,int k){
-				if(k<=0||k>size)
-					return -1;
+			class RandomFactory{
+			private:
+				RandomFactory(){
+					initFactory();
+				}
+				~RandomFactory(){
+					cleanUp();
+				}
+			public:
+				bool initFactory();
+				void cleanUp();
+				unsigned int getRandom();
+			public:
+				static RandomFactory* getFactory(){
+					return &SELF;
+				}
+			private:
+				static RandomFactory SELF;
+			private:
+#if defined _WIN32
+				HCRYPTPROV  m_hCryptProv;
+#endif
+				unsigned int  m_Int;
+			};
 
-				return -1;
-			}
+
 		}
 	};
 };

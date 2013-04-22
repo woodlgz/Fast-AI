@@ -43,8 +43,8 @@ void Demo1(){
 void Demo2(){
 	unsigned int len = 20;
 	unsigned int itemCnt[21]	=	{0,5,3,2,9,3,1,9,3,4,12,6,4,3,8,17,18, 4,1,9,3};	//first element is just place holder
-	unsigned int value[21]		=	{0,2,5,4,3,6,7, 3,5,2,2 ,3,8,3, 1,3 ,1,9,6,2,7};
-	unsigned int weight[21]		=	{0,2,3,3,4,5,4, 4,5,4,2 ,1,5,3, 2,3 ,3,8,4,3,5};
+	unsigned int value[21]		=	{0,2,5,4,3,6,7, 3,5,2,2 ,3,2,3, 1,3 ,1,9,6,2,7};
+	unsigned int weight[21]		=	{0,2,3,3,4,5,4, 4,5,4,2 ,3,5,3, 2,3 ,3,8,4,3,5};
 	unsigned int packSize = 30;
 	unsigned int packItemCnt = 10;
 	unsigned int solution[21];
@@ -57,12 +57,14 @@ void Demo2(){
 	}
 	cout<<"GA solution"<<endl;
 	GFactory* factory = GeneticFactory<Demo2GeneticPhase>::getFactory();
-	Env* env = new Demo2Env(factory,0.02,0.01,10000);	// the longer the age is ,the more likely it is to get the right answer
+	Env* env = new Demo2Env(factory,0.02,0.01,1000);	// the longer the age is ,the more likely it is to get the right answer
 	GeneticPhase* answer = Solve(env,100);
 	answer->read();
 	delete factory;
 	delete env;
 }
+
+
 
 int main(int argc,char** argv){
 	Demo2();

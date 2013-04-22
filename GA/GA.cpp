@@ -12,6 +12,7 @@
 #include <iostream>
 
 using namespace std;
+	
 
 namespace FASTAI{
 	namespace GA{
@@ -48,6 +49,7 @@ namespace FASTAI{
 			if(m_HistoryBest->getAnswer()<m_Population[m_Max]->getAnswer())
 				*m_HistoryBest = *m_Population[m_Max];		// copy the best one
 		}
+
 		//note : if accumScore == 0.0 or m_Score has elements that equal to 0.0,the result can be unreliable
 		bool Env::reproduction(){
 			if(m_Age*1.0/m_AgeMax<=0.2){	// try to trigger a leap in the late period
@@ -57,9 +59,7 @@ namespace FASTAI{
 			}
 			float accumScore = m_ScoreAux[m_PSize-1];
 			unsigned int iScore = (unsigned int)(accumScore * Env::BASE);
-			time_t t = time(NULL);
-			srand(rand()%t);
-			float score = (rand()%(iScore+1))*1.0 / Env::BASE;
+			float score = (GENERATE_RANDOM()%(iScore+1))*1.0 / Env::BASE;
 			int lb = 0, ub = m_PSize;
 			while(lb<=ub){
 				int mid = lb+((ub-lb)>>1);
@@ -83,9 +83,7 @@ namespace FASTAI{
 				return -1;
 			float accumScore = m_ScoreAux[end];
 			unsigned int iScore = (unsigned int)(accumScore * Env::BASE);
-			time_t t = time(NULL);
-			srand(rand()%t);
-			float score = (rand()%(iScore+1))*1.0 / Env::BASE;
+			float score = (GENERATE_RANDOM()%(iScore+1))*1.0 / Env::BASE;
 			int lb = begin, ub = end;
 			while(lb<=ub){
 				int mid = lb+((ub-lb)>>1);
@@ -97,17 +95,11 @@ namespace FASTAI{
 		}
 
 		bool Env::exchage(){
-			time_t t = time(NULL);
-			srand(rand()%t);
-			int rInt = (rand()%(Env::BASE))+1;
+			int rInt = (GENERATE_RANDOM()%(Env::BASE))+1;
 			if(rInt<=m_CRate){	//bingo
-				t = time(NULL);
-				srand(rand()%t);
-				rInt = rand()%(m_PSize);
+				rInt = GENERATE_RANDOM()%(m_PSize);
 				swap(m_Population[rInt],m_Population[m_PSize-1]);
-				t = time(NULL);
-				srand(rand()%t);
-				rInt = rand()%(m_PSize-1);
+				rInt = GENERATE_RANDOM()%(m_PSize-1);
 				m_Population[rInt]->crossing(m_Population[m_PSize-1]);
 				m_Population[rInt]->resetAnswer();
 				//m_Max may change
@@ -117,15 +109,9 @@ namespace FASTAI{
 		}
 
 		bool Env::mutate(){
-			time_t t = time(NULL);
-			srand(rand()%t);
-			int rInt = (rand()%(Env::BASE))+1;
+			int rInt = (GENERATE_RANDOM()%(Env::BASE))+1;
 			if(rInt<=m_MRate){	//bingo
-				t = time(NULL);
-				srand(rand()%t);
-				rInt = rand()%(m_PSize);
-				t = time(NULL);
-				srand(rand()%t);
+				rInt = GENERATE_RANDOM()%(m_PSize);
 				m_Population[rInt]->mutate();
 				m_Population[rInt]->resetAnswer();
 				return true;
@@ -154,11 +140,11 @@ namespace FASTAI{
 			env->initPopulation(pSize);
 			while(!env->isEndOfWorld()){
 				env->evaluate();
-				int tmp = env->bestFit()->getAnswer();
-				if(answer!=tmp){
-					answer = tmp;
-					cout<<"answer at age "<<env->getAge()<<" is "<<answer<<endl;
-				}
+				//int tmp = env->bestFit()->getAnswer();
+				//if(answer!=tmp){
+				//	answer = tmp;
+				//	cout<<"answer at age "<<env->getAge()<<" is "<<answer<<endl;
+				//}
 				env->reproduction();
 				env->exchage();
 				env->mutate();

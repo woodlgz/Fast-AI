@@ -48,9 +48,7 @@ private:
 		time_t t;
 		m_Coding = new int[m_Len];
 		for(int i=0;i<m_Len;i++){
-			t = time(NULL);
-			srand(rand()%t);
-			m_Coding[i] = rand()%2;
+			m_Coding[i] = GENERATE_RANDOM()%2;
 		}
 	}
 	void cleanup(){
@@ -61,30 +59,22 @@ private:
 	}
 	void crossing(GeneticPhase* phase){
 		Demo1GeneticPhase* _phase = static_cast<Demo1GeneticPhase*>(phase);
-		time_t t = time(NULL);
-		srand(rand()%t);
-		int i = rand()%_phase->m_Len;
+		int i = GENERATE_RANDOM()%_phase->m_Len;
 		swap(m_Coding[i],_phase->m_Coding[i]);
 	}
 	void mutate(){
-		time_t t = time(NULL);
-		srand(rand()%t);
-		int i = rand()%m_Len;
-		t = time(NULL);
-		srand(rand()%t);
-		m_Coding[i] = rand()%2==0?(~(0x01&m_Coding[i]))&0x01:m_Coding[i];
+		int i = GENERATE_RANDOM()%m_Len;
+		m_Coding[i] = GENERATE_RANDOM()%2==0?(~(0x01&m_Coding[i]))&0x01:m_Coding[i];
 	}
 	void reConstruct(){
 		bool valid = false;
 		for(int i=0;i<m_Len;i++){
-			srand(rand()%time(NULL));
-			m_Coding[i] = rand()%2;
+			m_Coding[i] = GENERATE_RANDOM()%2;
 			if(!valid && m_Coding[i] == 1)
 				valid = true;
 		}
 		if(!valid){
-			srand(rand()%time(NULL));
-			m_Coding[rand()%m_Len] = 1;
+			m_Coding[GENERATE_RANDOM()%m_Len] = 1;
 		}
 	}
 public :

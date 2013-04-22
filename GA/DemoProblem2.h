@@ -78,13 +78,11 @@ private:
 		for(int i=1;i<=m_Len;i++)
 			m_RandomAux[i] = i;
 		for(int i=m_Len;i>=1;i--){
-			srand(rand()%time(NULL));
-			swap(m_RandomAux[(rand()%i)+1],m_RandomAux[i]);
+			swap(m_RandomAux[(GENERATE_RANDOM()%i)+1],m_RandomAux[i]);
 		}
 		for(int i=1;i<=m_Len;i++){
 			int tmp = min(min(ItemCnt[m_RandomAux[i]],mPackSize / Weight[m_RandomAux[i]]),(uint)mPackItemCnt);
-			srand(rand()%time(NULL));
-			m_Coding[m_RandomAux[i]] = rand()%(tmp+1);
+			m_Coding[m_RandomAux[i]] = GENERATE_RANDOM()%(tmp+1);
 			mPackItemCnt -= m_Coding[m_RandomAux[i]];
 			mPackSize -= m_Coding[m_RandomAux[i]]*Weight[m_RandomAux[i]];
 		}
@@ -101,21 +99,13 @@ private:
 	}
 	void crossing(GeneticPhase* phase){
 		Demo2GeneticPhase* _phase = static_cast<Demo2GeneticPhase*>(phase);
-		time_t t;
-		t = time(NULL);
-		srand(rand()%t);
-		int rInt = (rand()%m_Len)+1;
+		int rInt = (GENERATE_RANDOM()%m_Len)+1;
 		swap(m_Coding[rInt],_phase->m_Coding[rInt]);
 	}
 
 	void mutate(){
-		time_t t;
-		t = time(NULL);
-		srand(rand()%t);
-		int rInt = (rand()%m_Len)+1;
-		t =  time(NULL);
-		srand(rand()%t);
-		m_Coding[rInt] = rand()%(ItemCnt[rInt]+1); //this may lead to frequent reproduction
+		int rInt = (GENERATE_RANDOM()%m_Len)+1;
+		m_Coding[rInt] = GENERATE_RANDOM()%(ItemCnt[rInt]+1); //this may lead to frequent reproduction
 	}
 
 	void reConstruct(){
@@ -124,13 +114,11 @@ private:
 		for(int i=1;i<=m_Len;i++)
 			m_RandomAux[i] = i;
 		for(int i=m_Len;i>=1;i--){
-				srand(rand()%time(NULL));
-				swap(m_RandomAux[(rand()%i)+1],m_RandomAux[i]);
+			swap(m_RandomAux[(GENERATE_RANDOM()%i)+1],m_RandomAux[i]);
 		}
 		for(int i=1;i<=m_Len;i++){
 			int tmp = min(min(ItemCnt[m_RandomAux[i]],mPackSize / Weight[m_RandomAux[i]]),(uint)mPackItemCnt);
-			srand(rand()%time(NULL));
-			m_Coding[m_RandomAux[i]] = rand()%(tmp+1);
+			m_Coding[m_RandomAux[i]] = GENERATE_RANDOM()%(tmp+1);
 			mPackItemCnt -= m_Coding[m_RandomAux[i]];
 			mPackSize -= m_Coding[m_RandomAux[i]]*Weight[m_RandomAux[i]];
 		}
