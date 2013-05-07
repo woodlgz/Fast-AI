@@ -46,7 +46,7 @@ namespace FASTAI{
 			if(m_PSize>0){
 				m_ScoreAvg = m_ScoreAux[m_PSize-1] / m_PSize;
 			}
-			if(m_HistoryBest->getAnswer()<m_Population[m_Max]->getAnswer())
+			if(!m_HistoryBest->isBetterThan(m_Population[m_Max]))
 				*m_HistoryBest = *m_Population[m_Max];		// copy the best one
 		}
 
@@ -140,11 +140,11 @@ namespace FASTAI{
 			env->initPopulation(pSize);
 			while(!env->isEndOfWorld()){
 				env->evaluate();
-				//int tmp = env->bestFit()->getAnswer();
-				//if(answer!=tmp){
-				//	answer = tmp;
-				//	cout<<"answer at age "<<env->getAge()<<" is "<<answer<<endl;
-				//}
+				int tmp = env->bestFit()->getAnswer();
+				if(answer!=tmp){
+					answer = tmp;
+					cout<<"answer at age "<<env->getAge()<<" is "<<answer<<endl;
+				}
 				env->reproduction();
 				env->exchage();
 				env->mutate();

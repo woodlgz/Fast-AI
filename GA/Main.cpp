@@ -9,6 +9,7 @@
 #include <assert.h>
 #include "DemoProblem1.h"
 #include "DemoProblem2.h"
+#include "DemoProblem3.h"
 
 #if defined _WIN32
 
@@ -75,9 +76,29 @@ void Demo2(){
 }
 
 
+void Demo3(){
+	int Graph[][Demo3GeneticPhase::MAX_VETEX+1] = {{0},{0,0,3,1,2,7},{0,5,0,1,3,3},{0,6,4,0,4,2},{0,3,2,5,0,3},{0,2,4,1,3,0}};//顶点为5的完全图
+	//int Graph[][Demo3GeneticPhase::MAX_VETEX+1] = {{0},{0,0,1,2},{0,1,0,1},{0,1,2,0}};
+	Demo3GeneticPhase::ProblemInit(Graph,5);
+	cout<<"normal solution:"<<endl;
+	Demo3GeneticPhase::DPSolver(1);
+	cout<<"GA solution:"<<endl;
+	GFactory* factory = GeneticFactory<Demo3GeneticPhase>::getFactory();
+	Env* env = new Demo3Env(factory,0.02,0.01,100);
+	GeneticPhase* answer = Solve(env,100);
+	answer->read();
+	delete factory;
+	delete env;
+}
+
+
 
 int main(int argc,char** argv){
-	Demo2();
+	try{
+		Demo3();
+	}catch(exception& e){
+		cout<<e.what()<<endl;
+	}
 #if defined _WIN32
 	system("pause");
 #endif

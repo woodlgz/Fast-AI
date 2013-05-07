@@ -12,6 +12,7 @@
 #include <string.h>
 #include <algorithm>
 #include <time.h>
+#include <assert.h>
 #include "AIException.h"
 #include "Util.h"
 using namespace std;
@@ -69,9 +70,15 @@ namespace FASTAI{
 			 * genetic phase copy
 			 */
 			virtual GeneticPhase& operator = (GeneticPhase& phase){
-					memcpy((void*)m_Coding,(void*)(phase.m_Coding),m_Len*sizeof(int));
-					m_Answer = phase.getAnswer();
-					return *this;
+				memcpy((void*)m_Coding,(void*)(phase.m_Coding),m_Len*sizeof(int));
+				m_Answer = phase.getAnswer();
+				return *this;
+			}
+			/**
+			 * determin if this is better than anther,the higher value is better by default 
+			 */
+			virtual bool isBetterThan(GeneticPhase* phase){
+				return getAnswer()>phase->getAnswer();
 			}
 
 			/**
@@ -331,7 +338,7 @@ namespace FASTAI{
 			}
 		protected:
 			/*
-			 * evaluate the whole population.
+			 * evaluate the whole population and generally one with better fitness gets higher score.
 			 * it can provide some information for judge(i).
 			 * called before judge(i) in evaluate().
 			 * overwrite this if needed.
@@ -342,9 +349,11 @@ namespace FASTAI{
 
 			/**
 			 * calculate the score for element,called in evaluate()
+			 * generally one with better fitness gets higher score.
 			 * @param: index for the element in population
 			 */
 			virtual float judge(int i) = 0;
+
 		private:
 
 			/**
@@ -371,7 +380,7 @@ namespace FASTAI{
 			float* m_ScoreAux;						//auxilary array
 			float  m_ScoreAvg;						//average score , may be needed when judging an element
 			float  m_ScoreMax;						//max score , may be needed when judging an element
-			GeneticPhase** m_Population;
+			(GeneticPhase*) (*m_Population);
 			GeneticPhase* m_HistoryBest;
 			GFactory* m_Factory;
 			RandomFactory* m_Random;
