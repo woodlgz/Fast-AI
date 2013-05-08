@@ -12,14 +12,23 @@
 #include <string.h>
 #include <algorithm>
 #include <time.h>
+#include <assert.h>
 #include "AIException.h"
+#include "Util.h"
 using namespace std;
+using namespace FASTAI::Util::Common;
+
+
+
+#define GENERATE_RANDOM()	(m_Random->getRandom())
+
 
 namespace FASTAI{
 	namespace GA{
 
 		const int POPULATION_DEFAULT_SIZE = 100;
-
+		const static float DEFAULT_CROSSRATE = 0.02;
+		const static float DEFAULT_MUTATERATE = 0.01;
 		class GeneticPhase;
 		class Env;
 
@@ -31,6 +40,7 @@ namespace FASTAI{
 		class GeneticPhase{
 		public:
 			GeneticPhase(int len):m_Len(len),m_Coding(NULL),m_Answer(-1){
+				m_Random = RandomFactory::getFactory();
 			}
 			virtual ~GeneticPhase(){
 			}
@@ -60,9 +70,15 @@ namespace FASTAI{
 			 * genetic phase copy
 			 */
 			virtual GeneticPhase& operator = (GeneticPhase& phase){
-					memcpy((void*)m_Coding,(void*)(phase.m_Coding),m_Len*sizeof(int));
-					m_Answer = phase.getAnswer();
-					return *this;
+				memcpy((void*)m_Coding,(void*)(phase.m_Coding),m_Len*sizeof(int));
+				m_Answer = phase.getAnswer();
+				return *this;
+			}
+			/**
+			 * determin if this is better than anther,the higher value is better by default 
+			 */
+			virtual bool isBetterThan(GeneticPhase* phase){
+				return getAnswer()>phase->getAnswer();
 			}
 
 			/**
@@ -127,6 +143,7 @@ namespace FASTAI{
 			int m_Len;
 			int* m_Coding;
 			int m_Answer;
+			RandomFactory* m_Random;
 		};
 
 		/**
@@ -183,6 +200,7 @@ namespace FASTAI{
 				m_ScoreMax = 0.0;
 				m_Age = m_AgeMax = age;
 				m_HistoryBest = NULL;
+				m_Random = RandomFactory::getFactory();
 			}
 			Env(GFactory* factory,float cRate = DEFAULT_CROSSRATE, float mRate = DEFAULT_MUTATERATE,
 					int age = MAX_AGE){
@@ -197,6 +215,7 @@ namespace FASTAI{
 				m_ScoreMax = 0.0;
 				m_Age = m_AgeMax = age;
 				m_HistoryBest = NULL;
+				m_Random = RandomFactory::getFactory();
 			}
 
 			virtual ~Env(){
@@ -319,7 +338,7 @@ namespace FASTAI{
 			}
 		protected:
 			/*
-			 * evaluate the whole population.
+			 * evaluate the whole population and generally one with better fitness gets higher score.
 			 * it can provide some information for judge(i).
 			 * called before judge(i) in evaluate().
 			 * overwrite this if needed.
@@ -330,9 +349,11 @@ namespace FASTAI{
 
 			/**
 			 * calculate the score for element,called in evaluate()
+			 * generally one with better fitness gets higher score.
 			 * @param: index for the element in population
 			 */
 			virtual float judge(int i) = 0;
+
 		private:
 
 			/**
@@ -346,8 +367,7 @@ namespace FASTAI{
 		public:
 			const static int BASE = 10000;
 			const static int MAX_AGE = 10000;
-			const static float DEFAULT_CROSSRATE = 0.02;
-			const static float DEFAULT_MUTATERATE = 0.01;
+
 		protected:
 			int m_CRate;
 			int m_MRate;
@@ -360,9 +380,10 @@ namespace FASTAI{
 			float* m_ScoreAux;						//auxilary array
 			float  m_ScoreAvg;						//average score , may be needed when judging an element
 			float  m_ScoreMax;						//max score , may be needed when judging an element
-			GeneticPhase** m_Population;
+			(GeneticPhase*) (*m_Population);
 			GeneticPhase* m_HistoryBest;
 			GFactory* m_Factory;
+			RandomFactory* m_Random;
 		};
 
 		/**
