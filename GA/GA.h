@@ -297,7 +297,7 @@ namespace FASTAI{
 			}
 
 			inline bool isEndOfWorld(){
-				return m_Age-- == 0;
+				return m_Age-- <= 0;
 			}
 			/**
 			 * initialize the population
