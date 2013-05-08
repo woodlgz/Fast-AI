@@ -77,7 +77,7 @@ void Demo2(){
 
 
 void Demo3(){
-	int Graph[][Demo3GeneticPhase::MAX_VETEX+1] = {{0},{0,0,3,1,2,7},{0,5,0,1,3,3},{0,6,4,0,4,2},{0,3,2,5,0,3},{0,2,4,1,3,0}};//¶¥µãÎª5µÄÍêÈ«Í¼
+	int Graph[][Demo3GeneticPhase::MAX_VETEX+1] = {{0},{0,0,3,1,2,7},{0,5,0,1,3,3},{0,6,4,0,4,2},{0,3,2,5,0,3},{0,2,4,1,3,0}};//é¡¶ç‚¹ä¸º5çš„å®Œå…¨å›¾
 	//int Graph[][Demo3GeneticPhase::MAX_VETEX+1] = {{0},{0,0,1,2},{0,1,0,1},{0,1,2,0}};
 	Demo3GeneticPhase::ProblemInit(Graph,5);
 	cout<<"normal solution:"<<endl;

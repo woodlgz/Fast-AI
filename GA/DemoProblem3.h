@@ -8,13 +8,13 @@
 /*
  * demo of solving TSP.
  * problem description:
- * ³ÇÊĞÄÚÓĞn¸öÉÌµê£¬Ã¿¸öÉÌµêÂôÒ»ÖÖ²»Í¬ÎïÆ·£¬ÏÖÔÚÒ»¸ö²É¹ºÔ±Òª²É¹ºÕânÖÖÎïÆ·£¬
- * Çó²É¹ºÔ±ÔÚÖ»·ÃÎÊÃ¿¸öÉÌµêÒ»´ÎÇÒ·µ»ØÔ­µãµÄÇé¿öÏÂ×îĞ¡È¨Í¨Â·¡£
- * ÎÊÌâ¼´ÇóÈ¡n¸ö¶¥µãµÄ´øÈ¨ÎŞÏòÍ¼ÏÂµÄ×îĞ¡¹şÃÜ¶Ù»ØÂ·¡£
- * Îª¼ò»¯ÎÊÌâ£¬¼Ù¶¨ÎŞÏòÍ¼ÊÇÍêÈ«Í¼¶øÇÒÂú×ãÈı½Ç²»µÈÊ½Ìõ¼ş£¬ÓÚÊÇ¿ÉÒÔÊ¹ÓÃChristofides 3/2½üËÆËã·¨Çó½â
- * ½â¾öÍêÈ«Í¼µÄTSPÎÊÌâ»¹¿ÉÒÔÊ¹ÓÃ¶¯Ì¬¹æ»®À´½â£¬»òÕßÊ¹ÓÃ·ÖÖ§½çÏŞ·¨
- * ÈôÊ¹ÓÃÒÅ´«Ëã·¨À´Çó½â£¬ÄÇÃ´ÎŞÂÛÍ¼ÎªÍêÈ«Í¼»òÊÇ·ñÂú×ãÈı½Ç²»µÈÊ½Ìõ¼ş£¬Ö»Òª¿ÉÒÔ±£Ö¤Í¼ÊÇ¹şÃÜ¶ÙÍ¼£¬
- * Ò»¸ö½üËÆ½âÊÇ¿ÉÒÔ»ñµÃµÄ
+ * åŸå¸‚å†…æœ‰nä¸ªå•†åº—ï¼Œæ¯ä¸ªå•†åº—å–ä¸€ç§ä¸åŒç‰©å“ï¼Œç°åœ¨ä¸€ä¸ªé‡‡è´­å‘˜è¦é‡‡è´­è¿™nç§ç‰©å“ï¼Œ
+ * æ±‚é‡‡è´­å‘˜åœ¨åªè®¿é—®æ¯ä¸ªå•†åº—ä¸€æ¬¡ä¸”è¿”å›åŸç‚¹çš„æƒ…å†µä¸‹æœ€å°æƒé€šè·¯ã€‚
+ * é—®é¢˜å³æ±‚å–nä¸ªé¡¶ç‚¹çš„å¸¦æƒæ— å‘å›¾ä¸‹çš„æœ€å°å“ˆå¯†é¡¿å›è·¯ã€‚
+ * ä¸ºç®€åŒ–é—®é¢˜ï¼Œå‡å®šæ— å‘å›¾æ˜¯å®Œå…¨å›¾è€Œä¸”æ»¡è¶³ä¸‰è§’ä¸ç­‰å¼æ¡ä»¶ï¼Œäºæ˜¯å¯ä»¥ä½¿ç”¨Christofides 3/2è¿‘ä¼¼ç®—æ³•æ±‚è§£
+ * è§£å†³å®Œå…¨å›¾çš„TSPé—®é¢˜è¿˜å¯ä»¥ä½¿ç”¨åŠ¨æ€è§„åˆ’æ¥è§£ï¼Œæˆ–è€…ä½¿ç”¨åˆ†æ”¯ç•Œé™æ³•
+ * è‹¥ä½¿ç”¨é—ä¼ ç®—æ³•æ¥æ±‚è§£ï¼Œé‚£ä¹ˆæ— è®ºå›¾ä¸ºå®Œå…¨å›¾æˆ–æ˜¯å¦æ»¡è¶³ä¸‰è§’ä¸ç­‰å¼æ¡ä»¶ï¼Œåªè¦å¯ä»¥ä¿è¯å›¾æ˜¯å“ˆå¯†é¡¿å›¾ï¼Œ
+ * ä¸€ä¸ªè¿‘ä¼¼è§£æ˜¯å¯ä»¥è·å¾—çš„
  */
 
 #ifndef DEMOPROBLEM3_H_
@@ -64,23 +64,23 @@ public:
 		this->m_Answer = _phase->calcValueOfCode();
 		return *this;
 	}
-	bool Demo3GeneticPhase::isBetterThan(GeneticPhase* phase){
+	bool isBetterThan(GeneticPhase* phase){
 		return getAnswer()<phase->getAnswer();
 	}
 private:
-	/** ¶Ô»ùÒòÆ¬¶Î½øĞĞ³õÊ¼»¯*/
+	/** å¯¹åŸºå› ç‰‡æ®µè¿›è¡Œåˆå§‹åŒ–*/
 	void init(){
 		m_Coding = new int[VETEX+1];
 		reConstruct();
 	}
-	/** ÇåÀí»ùÒòÆ¬¶Î*/
+	/** æ¸…ç†åŸºå› ç‰‡æ®µ*/
 	void cleanup(){
 		if(m_Coding){
 			delete[] m_Coding;
 			m_Coding = NULL;
 		}
 	}
-	/** Õë¶Ô»ùÒòÆ¬¶ÎµÄÔÓ½»´¦Àí*/
+	/** é’ˆå¯¹åŸºå› ç‰‡æ®µçš„æ‚äº¤å¤„ç†*/
 	void crossing(GeneticPhase* phase){
 		Demo3GeneticPhase* _phase = static_cast<Demo3GeneticPhase*>(phase);
 		int rInt = GENERATE_RANDOM()%(VETEX+1);
@@ -94,14 +94,14 @@ private:
 		}
 	}
 
-	/** Õë¶Ô»ùÒòÆ¬¶ÎµÄ±äÒì´¦Àí*/
+	/** é’ˆå¯¹åŸºå› ç‰‡æ®µçš„å˜å¼‚å¤„ç†*/
 	void mutate(){
 		int rInt = (GENERATE_RANDOM()%(m_Len-2))+1;
 		int rInt2 = (GENERATE_RANDOM()%(m_Len-2))+1;
 		swap(m_Coding[rInt],m_Coding[rInt2]);
 	}
 
-	/** ¸ß¼¶±äÒì,ÖØĞÂ¹¹Ôì»ùÒò±£Ö¤»ùÒò³ÉÎª¿ÉÄÜ´æ»îµÄ¸öÌå*/
+	/** é«˜çº§å˜å¼‚,é‡æ–°æ„é€ åŸºå› ä¿è¯åŸºå› æˆä¸ºå¯èƒ½å­˜æ´»çš„ä¸ªä½“*/
 	void reConstruct(){
 		for(int i=1;i<=VETEX;i++)
 			m_Coding[i] = i;
@@ -111,11 +111,11 @@ private:
 	}
 
 public:
-	//ÎªÁË½øĞĞ³£¹æ½â·¨ºÍGAÇó½âµÄ¶Ô±È£¬¶¨Òå³£¹æ½â·¨µÄ¾²Ì¬solver
+	//ä¸ºäº†è¿›è¡Œå¸¸è§„è§£æ³•å’ŒGAæ±‚è§£çš„å¯¹æ¯”ï¼Œå®šä¹‰å¸¸è§„è§£æ³•çš„é™æ€solver
 	static void ProblemInit(int G[][Demo3GeneticPhase::MAX_VETEX+1],int vetex){
-		//³õÊ¼»¯ÎÊÌâ£¬¼´³õÊ¼»¯´ú±í³ÇÊĞÄÚ²¿ÉÌµêµÄÍ¼£¬ÎªÁË·½±ã´¦Àí¼Ù¶¨¸÷ÉÌµêµÄ±àºÅ´Ó1¿ªÊ¼
-		//ÔÚ±¾DemoÖĞÍ¼µÄÊı¾İ½á¹¹Ê¹ÓÃ¶şÎ¬Êı×é±íÊ¾·½Ê½£¬ÈçÓĞĞèÒª¿ÉÒÔ¸ÄÓÃÁÚ½Ó±í
-		//Graph[i][j]±íÊ¾ÉÌµêiµ½ÉÌµêjµÄÂ·¾¶µÄÈ¨Öµ£¬ÈôÈ¨ÖµĞ¡ÓÚ0±íÊ¾iºÍj²»ÏàÁÚ
+		//åˆå§‹åŒ–é—®é¢˜ï¼Œå³åˆå§‹åŒ–ä»£è¡¨åŸå¸‚å†…éƒ¨å•†åº—çš„å›¾ï¼Œä¸ºäº†æ–¹ä¾¿å¤„ç†å‡å®šå„å•†åº—çš„ç¼–å·ä»1å¼€å§‹
+		//åœ¨æœ¬Demoä¸­å›¾çš„æ•°æ®ç»“æ„ä½¿ç”¨äºŒç»´æ•°ç»„è¡¨ç¤ºæ–¹å¼ï¼Œå¦‚æœ‰éœ€è¦å¯ä»¥æ”¹ç”¨é‚»æ¥è¡¨
+		//Graph[i][j]è¡¨ç¤ºå•†åº—iåˆ°å•†åº—jçš„è·¯å¾„çš„æƒå€¼ï¼Œè‹¥æƒå€¼å°äº0è¡¨ç¤ºiå’Œjä¸ç›¸é‚»
 		for(int i=1;i<=vetex;i++){
 			for(int j=1;j<=vetex;j++){
 				Graph[i][j] = G[i][j];
@@ -124,7 +124,7 @@ public:
 		}
 		VETEX = vetex;
 	}
-	//ÍêÈ«Í¼ÅĞ¶Ï
+	//å®Œå…¨å›¾åˆ¤æ–­
 	static bool isCompleteGraph(){
 		int cnt[MAX_VETEX+1];
 		memset(cnt,0,sizeof(cnt));
@@ -137,7 +137,7 @@ public:
 				return false;
 		return true;
 	}
-	//ÊÇ·ñÂú×ãÈı½Ç²»µÈÊ½Ìõ¼şÅĞ¶Ï
+	//æ˜¯å¦æ»¡è¶³ä¸‰è§’ä¸ç­‰å¼æ¡ä»¶åˆ¤æ–­
 	static bool triangleSuffice(){
 		for(int i=1;i<=VETEX;i++){
 			for(int j=1;j<=VETEX;j++){
@@ -151,11 +151,11 @@ public:
 		return true;
 	}
 
-	// ¶ÔÓÚÍêÈ«Í¼µÄDP½â·¨
-	// @param ³ö·¢µÄÔ´µã
+	// å¯¹äºå®Œå…¨å›¾çš„DPè§£æ³•
+	// @param å‡ºå‘çš„æºç‚¹
 	static void DPSolver(int start){
-		bool subset[MAX_VETEX+1];	//Ê£Óà×Ó¼¯
-		int path[MAX_VETEX+1];		//×îÓÅ»ØÂ·
+		bool subset[MAX_VETEX+1];	//å‰©ä½™å­é›†
+		int path[MAX_VETEX+1];		//æœ€ä¼˜å›è·¯
 		memset(subset,true,sizeof(subset));
 		subset[start] = false;
 		int m = _DPSolver(start,start,subset,path,0);
@@ -166,18 +166,18 @@ public:
 		}
 		cout<<endl;
 	}
-	// ·ÖÖ§½çÏŞ½â·¨,ÏÈÍÚ¸ö¿Ó
+	// åˆ†æ”¯ç•Œé™è§£æ³•,å…ˆæŒ–ä¸ªå‘
 	static void AStarSolver(){
 	}
-	// ¶ÔÓÚÂú×ãÈı½Ç²»µÈÊ½µÄÍ¼µÄChristrofides½üËÆ½â·¨,ÏÈÍÚ¸ö¿Ó
+	// å¯¹äºæ»¡è¶³ä¸‰è§’ä¸ç­‰å¼çš„å›¾çš„Christrofidesè¿‘ä¼¼è§£æ³•,å…ˆæŒ–ä¸ªå‘
 	static void ChristrofidesSolver(){
 	}
 private:
-	/*@param source: ×î³õµÄÔ´µã
-	 *@param start:	 ÓÉÉÏÒ»²ãÑ¡ÖĞµÄ±¾²ãµÄÀ©Õ¹½Úµã
-	 *@param subset: ´øÀ©Õ¹½Úµã×Ó¼¯
-	 *@param path:   ¼ÇÂ¼´Ó±¾²ã¿ªÊ¼Í¨¹ıÁªÍ¨×Ó¼¯¸÷½Úµã»ñµÃ×î¶ÌÄ¿±êµÄÂ·¾¶
-	 *@param depth:  µ±Ç°Éî¶È
+	/*@param source: æœ€åˆçš„æºç‚¹
+	 *@param start:	 ç”±ä¸Šä¸€å±‚é€‰ä¸­çš„æœ¬å±‚çš„æ‰©å±•èŠ‚ç‚¹
+	 *@param subset: å¸¦æ‰©å±•èŠ‚ç‚¹å­é›†
+	 *@param path:   è®°å½•ä»æœ¬å±‚å¼€å§‹é€šè¿‡è”é€šå­é›†å„èŠ‚ç‚¹è·å¾—æœ€çŸ­ç›®æ ‡çš„è·¯å¾„
+	 *@param depth:  å½“å‰æ·±åº¦
 	 */
 	static int _DPSolver(int source,int start,bool subset[],int path[],int depth){
 		int m = 0x1FFFFFFF;
@@ -219,7 +219,7 @@ private:
 	void judge(){
 		m_ScoreMax = 0.0;
 		for(int i=0;i<m_PSize;i++){
-			m_Score[i] = 100.0 / m_Population[i]->calcValueOfCode();	//×ÜÈ¨ÖµÔ½µÍ·ÖÊıÔ½¸ß
+			m_Score[i] = 100.0 / m_Population[i]->calcValueOfCode();	//æ€»æƒå€¼è¶Šä½åˆ†æ•°è¶Šé«˜
 			if(m_ScoreMax<m_Score[i])
 				m_ScoreMax = m_Score[i];
 		}
@@ -233,4 +233,4 @@ private:
 	
 };
 
-#endif
+#endif /* DEMOPROBLEM3_H_ */
