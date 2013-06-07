@@ -15,6 +15,7 @@
 #include <assert.h>
 #include "../AIException.h"
 #include "../Utility/Util.h"
+
 using namespace std;
 using namespace FASTAI::Util::Common;
 
@@ -316,7 +317,7 @@ namespace FASTAI{
 			}
 
 			inline bool isEndOfWorld(){
-				return m_Age-- == 0;
+				return m_Age-- <= 0;
 			}
 			/**
 			 * initialize the population
@@ -380,7 +381,7 @@ namespace FASTAI{
 			float* m_ScoreAux;						//auxilary array
 			float  m_ScoreAvg;						//average score , may be needed when judging an element
 			float  m_ScoreMax;						//max score , may be needed when judging an element
-			GeneticPhase** m_Population;
+			GeneticPhase* *m_Population;
 			GeneticPhase* m_HistoryBest;
 			GFactory* m_Factory;
 			RandomFactory* m_Random;

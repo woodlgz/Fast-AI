@@ -7,6 +7,7 @@
 
 #include <iostream>
 #include <assert.h>
+
 #include "GA_DemoProblem1.h"
 #include "GA_DemoProblem2.h"
 #include "GA_DemoProblem3.h"
