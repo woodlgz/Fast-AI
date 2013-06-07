@@ -1,4 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<session version="1.0">
-<refactoring comment="Rename resource &apos;GA/util.h&apos; to &apos;Util.h&apos;" description="Rename resource &apos;util.h&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="util.h" name="Util.h" stamp="1366177903223" updateReferences="true"/>
-</session>

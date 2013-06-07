@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <title> - jsFiddle demo</title>
+  
+  <script type='text/javascript' src='./jquery-1.9.1.js'></script>
+  
+  <script src="./highcharts.js"></script>
+<script src="http://code.highcharts.com/modules/exporting.js"></script>
+  
+  
+  <style type='text/css'>
+    
+  </style>
+  
+
+
+<script type='text/javascript'>//<![CDATA[ 
+
+$(function () {
+        $('#container').highcharts({
+            chart: {
+                type: 'scatter',
+                zoomType: 'xy'
+            },
+            title: {
+                text: '学习过程'
+            },
+            xAxis: {
+                title: {
+                    enabled: true,
+                    text: '时间'
+                },
+                startOnTick: true,
+                endOnTick: true,
+                showLastLabel: true
+            },
+            yAxis: {
+                title: {
+                    text: '输出均方误差 '
+                }
+            },
+            legend: {
+                layout: 'vertical',
+                align: 'left',
+                verticalAlign: 'top',
+                x: 60,
+                y: 30,
+                floating: true,
+                backgroundColor: '#FFFFFF',
+                borderWidth: 1
+            },
+            plotOptions: {
+                scatter: {
+                	marker: {
+                       /* fillColor: '#FFFFFF',*/
+                        lineWidth: 1,
+                        lineColor: null // inherit from series
+                    }/*marker: {
+                    radius: 3,
+                    states: {
+                        hover: {
+                            enabled: true,
+                            lineColor: 'rgb(100,100,100)'
+                        }
+                    }
+                }*/,
+                    states: {
+                        hover: {
+                            marker: {
+                                enabled: false
+                            }
+                        }
+                    }
+                }
+            },
+            series: [{
+                name: '学习过程',
+                data: [[1,0.0416525],[2,0.0164348],[3,0.00600474],[4,0.00197159],[5,0.00117217],[6,0.00104622],[7,0.000973767],[8,0.000929736],[9,0.000900819],[10,0.000885742],[11,0.000878515],[12,0.000875459],[13,0.000873979],[14,0.000872454],[15,0.00087051],[16,0.000867741],[17,0.00086391],[18,0.000859286],[19,0.000854237],[20,0.000849737],[21,0.000843178],[22,0.000835937],[23,0.000828062],[24,0.000819251],[25,0.000810232],[26,0.000801123],[27,0.000791626],[28,0.000780965],[29,0.000769562],[30,0.000757032],[31,0.000744307],[32,0.000732809],[33,0.0007204],[34,0.00070758],[35,0.000694403],[36,0.000682646],[37,0.000674437],[38,0.000662865],[39,0.000651393],[40,0.000640004],[41,0.000627412],[42,0.000615265],[43,0.000603515],[44,0.0005917],[45,0.000579775],[46,0.000568565],[47,0.000555864],[48,0.000542464],[49,0.000528757],[50,0.000514712],[51,0.00049982],[52,0.00048603],[53,0.000475476],[54,0.00046165],[55,0.000447025],[56,0.000431606],[57,0.000417043],[58,0.000401238],[59,0.000385884],[60,0.000369414],[61,0.000353563],[62,0.000338946],[63,0.000325596],[64,0.000312475],[65,0.000300139],[66,0.000288589],[67,0.000280239]],
+                marker:{
+                	fillColor:'#FFFFFF'
+                }
+            }
+            
+            ]
+        });
+    });
+    
+
+//]]>  
+
+</script>
+
+
+</head>
+<body>
+
+<div id="container" style="min-width: 400px;width:800px; height: 400px; margin: 0 auto"></div>
+
+  
+</body>
+
+
+</html>
+

@@ -1,0 +1,56 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FastAI", "FastAI\FastAI.vcxproj", "{31366379-37AE-4E57-8F93-78AC2850C364}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GA_Test", "GA_Test\GA_Test.vcxproj", "{21209980-1F7A-40A9-8A11-0F7B909888F1}"
+	ProjectSection(ProjectDependencies) = postProject
+		{31366379-37AE-4E57-8F93-78AC2850C364} = {31366379-37AE-4E57-8F93-78AC2850C364}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ANN_Test", "ANN_Test\ANN_Test.vcxproj", "{297F0402-5BC3-45CC-8D22-A0898EFEC79A}"
+	ProjectSection(ProjectDependencies) = postProject
+		{31366379-37AE-4E57-8F93-78AC2850C364} = {31366379-37AE-4E57-8F93-78AC2850C364}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Utility_Test", "Utility_Test\Utility_Test.vcxproj", "{9EBE4789-64FA-4BA9-8491-C674F630D670}"
+	ProjectSection(ProjectDependencies) = postProject
+		{31366379-37AE-4E57-8F93-78AC2850C364} = {31366379-37AE-4E57-8F93-78AC2850C364}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FastAITool", "FastAITool\FastAITool.vcxproj", "{789680C5-3ACF-4D6E-A22E-A22907FF1A99}"
+	ProjectSection(ProjectDependencies) = postProject
+		{31366379-37AE-4E57-8F93-78AC2850C364} = {31366379-37AE-4E57-8F93-78AC2850C364}
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{31366379-37AE-4E57-8F93-78AC2850C364}.Debug|Win32.ActiveCfg = Debug|Win32
+		{31366379-37AE-4E57-8F93-78AC2850C364}.Debug|Win32.Build.0 = Debug|Win32
+		{31366379-37AE-4E57-8F93-78AC2850C364}.Release|Win32.ActiveCfg = Release|Win32
+		{31366379-37AE-4E57-8F93-78AC2850C364}.Release|Win32.Build.0 = Release|Win32
+		{21209980-1F7A-40A9-8A11-0F7B909888F1}.Debug|Win32.ActiveCfg = Debug|Win32
+		{21209980-1F7A-40A9-8A11-0F7B909888F1}.Debug|Win32.Build.0 = Debug|Win32
+		{21209980-1F7A-40A9-8A11-0F7B909888F1}.Release|Win32.ActiveCfg = Release|Win32
+		{21209980-1F7A-40A9-8A11-0F7B909888F1}.Release|Win32.Build.0 = Release|Win32
+		{297F0402-5BC3-45CC-8D22-A0898EFEC79A}.Debug|Win32.ActiveCfg = Debug|Win32
+		{297F0402-5BC3-45CC-8D22-A0898EFEC79A}.Debug|Win32.Build.0 = Debug|Win32
+		{297F0402-5BC3-45CC-8D22-A0898EFEC79A}.Release|Win32.ActiveCfg = Release|Win32
+		{297F0402-5BC3-45CC-8D22-A0898EFEC79A}.Release|Win32.Build.0 = Release|Win32
+		{9EBE4789-64FA-4BA9-8491-C674F630D670}.Debug|Win32.ActiveCfg = Debug|Win32
+		{9EBE4789-64FA-4BA9-8491-C674F630D670}.Debug|Win32.Build.0 = Debug|Win32
+		{9EBE4789-64FA-4BA9-8491-C674F630D670}.Release|Win32.ActiveCfg = Release|Win32
+		{9EBE4789-64FA-4BA9-8491-C674F630D670}.Release|Win32.Build.0 = Release|Win32
+		{789680C5-3ACF-4D6E-A22E-A22907FF1A99}.Debug|Win32.ActiveCfg = Debug|Win32
+		{789680C5-3ACF-4D6E-A22E-A22907FF1A99}.Debug|Win32.Build.0 = Debug|Win32
+		{789680C5-3ACF-4D6E-A22E-A22907FF1A99}.Release|Win32.ActiveCfg = Release|Win32
+		{789680C5-3ACF-4D6E-A22E-A22907FF1A99}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

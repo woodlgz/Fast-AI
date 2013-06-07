@@ -1,0 +1,11 @@
+﻿生成启动时间为 2013/5/17 13:09:38。
+     1>项目“E:\Projects\FastAI\build\win\FastAI\FastAI\FastAI.vcxproj”在节点 2 上(Build 个目标)。
+     1>Lib:
+         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\Lib.exe /OUT:"E:\Projects\FastAI\build\win\FastAI\..\..\..\lib\Debug\FastAI.lib" /NOLOGO Debug\GA.obj
+         Debug\Util.obj
+         FastAI.vcxproj -> E:\Projects\FastAI\build\win\FastAI\..\..\..\lib\Debug\FastAI.lib
+     1>已完成生成项目“E:\Projects\FastAI\build\win\FastAI\FastAI\FastAI.vcxproj”(Build 个目标)的操作。
+
+生成成功。
+
+已用时间 00:00:00.45

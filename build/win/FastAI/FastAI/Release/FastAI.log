@@ -1,0 +1,26 @@
+﻿生成启动时间为 2013/6/5 22:05:25。
+     1>项目“E:\Projects\FastAI\build\win\FastAI\FastAI\FastAI.vcxproj”在节点 2 上(Build 个目标)。
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\CL.exe /c /Zi /nologo /W3 /WX- /O2 /Oi /Oy- /GL /D _MBCS /Gm- /EHsc /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Release\\" /Fd"Release\vc110.pdb" /Gd /TP /analyze- /errorReport:prompt ..\..\..\..\source\ANN\RBFNeuralNetwork.cpp
+         RBFNeuralNetwork.cpp
+     1>E:\Projects\Boost Library\boost_1_53_0\boost/archive/tmpdir.hpp(35): warning C4996: 'getenv': This function or variable may be unsafe. Consider using _dupenv_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\include\stdlib.h(449) : 参见“getenv”的声明
+     1>E:\Projects\Boost Library\boost_1_53_0\boost/archive/tmpdir.hpp(37): warning C4996: 'getenv': This function or variable may be unsafe. Consider using _dupenv_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\include\stdlib.h(449) : 参见“getenv”的声明
+     1>E:\Projects\Boost Library\boost_1_53_0\boost/archive/tmpdir.hpp(39): warning C4996: 'getenv': This function or variable may be unsafe. Consider using _dupenv_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\include\stdlib.h(449) : 参见“getenv”的声明
+       Lib:
+         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\Lib.exe /OUT:"E:\Projects\FastAI\build\win\FastAI\..\..\..\lib\Release\FastAI.lib" /NOLOGO /LTCG Release\ANN.obj
+         Release\BPNeuralNetwork.obj
+         Release\DataSet.obj
+         Release\RBFNeuralNetwork.obj
+         Release\GA.obj
+         Release\hybrid.obj
+         Release\Matrix.obj
+         Release\Util.obj
+         FastAI.vcxproj -> E:\Projects\FastAI\build\win\FastAI\..\..\..\lib\Release\FastAI.lib
+     1>已完成生成项目“E:\Projects\FastAI\build\win\FastAI\FastAI\FastAI.vcxproj”(Build 个目标)的操作。
+
+生成成功。
+
+已用时间 00:00:05.73
